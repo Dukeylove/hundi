@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Hundi ♡ Wer passt auf?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mochiy+Pop+One&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFF3F7; --card:#FFFFFF; --ink:#5A2E4A; --muted:#B083A0; --line:#FADDE8;
+    --pink:#FF7FA8; --pink-d:#EA5B8B; --pink-s:#FFE3EC;
+    --mint:#43CCA4; --mint-d:#2CAE89; --mint-s:#D8F6EC;
+    --butter:#FFB637; --butter-d:#EC9C1E; --butter-s:#FFF0CE;
+    --lav:#B18BEA; --lav-s:#EFE6FF; --sky:#78C8FF; --sky-s:#E6F4FF; --grey-s:#F0E9EE;
+    --shadow:0 16px 44px -14px rgba(255,127,168,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Quicksand',system-ui,sans-serif;font-weight:600;background:radial-gradient(circle at 12% 6%,#FFE6F0 0,transparent 42%),radial-gradient(circle at 92% 18%,#E8F0FF 0,transparent 40%),var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:440px;margin:0 auto;min-height:100dvh;position:relative;display:flex;flex-direction:column}
+  .fred{font-family:'Fredoka',sans-serif} .pop{font-family:'Mochiy Pop One',sans-serif;font-weight:400}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-weight:600}
+  input{font-family:inherit;font-weight:600}
+  .cbtn{border-radius:20px;color:#fff;font-weight:700;transition:transform .06s,box-shadow .06s}
+  .cbtn:active{transform:translateY(4px)}
+  .cbtn.pink{background:var(--pink);box-shadow:0 5px 0 var(--pink-d)} .cbtn.pink:active{box-shadow:0 1px 0 var(--pink-d)}
+  .cbtn.mint{background:var(--mint);box-shadow:0 5px 0 var(--mint-d)} .cbtn.mint:active{box-shadow:0 1px 0 var(--mint-d)}
+
+  /* LOGIN */
+  #login{flex:1;display:flex;flex-direction:column;justify-content:center;padding:30px 26px 44px}
+  .hero-dog{width:132px;height:132px;border-radius:42px 42px 46px 40px;margin:0 auto 20px;background:linear-gradient(150deg,#fff,var(--pink-s));display:flex;align-items:center;justify-content:center;font-size:66px;box-shadow:var(--shadow);position:relative;animation:bob 3.2s ease-in-out infinite}
+  .hero-dog::after{content:"✧";position:absolute;top:-6px;right:2px;font-size:26px;color:var(--butter)}
+  .hero-dog::before{content:"♡";position:absolute;bottom:2px;left:-4px;font-size:22px;color:var(--pink)}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+  .brand{text-align:center;margin-bottom:26px} .brand h1{font-size:46px;color:var(--pink)}
+  .brand p{color:var(--muted);margin-top:8px;font-size:15px;line-height:1.5;padding:0 6px}
+  .field{margin-bottom:12px} .field label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px 8px}
+  .field input{width:100%;padding:15px 18px;border-radius:18px;border:2.5px solid var(--line);background:var(--card);font-size:16px;color:var(--ink)}
+  .field input:focus{outline:none;border-color:var(--pink)}
+  .cbtn.big{width:100%;padding:17px;font-size:17px;margin-top:6px}
+  .divider{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px;margin:22px 0 14px}
+  .divider::before,.divider::after{content:"";flex:1;height:2px;background:var(--line);border-radius:2px}
+  .demo-row{display:flex;gap:10px}
+  .demo-row button{flex:1;padding:14px 8px;border-radius:18px;border:2.5px dashed var(--line);background:var(--card);font-weight:700;font-size:15px;color:var(--ink)}
+  .demo-row button:active{border-style:solid;border-color:var(--pink)}
+  .demo-row .sub{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-top:3px}
+
+  /* APP */
+  #app{display:none;flex:1;flex-direction:column;padding-bottom:120px}
+  .topbar{padding:18px 22px 10px;display:flex;align-items:center;gap:12px}
+  .topbar .avatar{width:48px;height:48px;border-radius:16px 16px 18px 15px;background:linear-gradient(150deg,#fff,var(--pink-s));display:flex;align-items:center;justify-content:center;font-size:27px;flex-shrink:0;box-shadow:0 6px 16px -6px rgba(255,127,168,.5)}
+  .topbar .hi{flex:1;min-width:0} .topbar .hi small{color:var(--muted);font-size:13px}
+  .topbar .hi div{font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+  .logout{color:var(--muted);font-size:13px;padding:8px}
+  .roletoggle{margin:2px 22px 14px;background:var(--pink-s);border-radius:18px;padding:5px;display:flex}
+  .roletoggle button{flex:1;padding:10px;border-radius:14px;font-size:14px;font-weight:700;color:var(--muted)}
+  .roletoggle button.on{background:#fff;color:var(--pink);box-shadow:0 3px 8px -2px rgba(255,127,168,.5)}
+
+  #hundisays{margin:0 22px 16px;display:flex;gap:10px;align-items:flex-start}
+  .hs-face{width:42px;height:42px;border-radius:14px;background:linear-gradient(150deg,#fff,var(--pink-s));display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0;box-shadow:0 5px 14px -5px rgba(255,127,168,.55)}
+  .hs-bubble{background:#fff;border:2.5px solid var(--line);border-radius:6px 18px 18px 18px;padding:11px 15px;font-size:14px;font-weight:700;color:var(--ink);line-height:1.45;flex:1}
+  .hs-bubble.sad{background:var(--butter-s);border-color:#F6D493}
+
+  .ownerActions{display:flex;gap:10px;padding:0 22px 14px}
+  .ownerActions button{flex:1;padding:12px;border-radius:16px;border:2.5px solid var(--line);background:var(--card);font-weight:700;font-size:14px;color:var(--ink)}
+  .ownerActions button:active{border-color:var(--pink)}
+
+  .reward{margin:0 18px 16px;border-radius:22px;padding:16px 18px;background:linear-gradient(150deg,#fff,var(--pink-s));border:2.5px solid var(--line)}
+  .rtop{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .rpts b{font-family:'Fredoka';font-size:30px;color:var(--pink);line-height:1} .rpts span{font-size:12px;color:var(--muted);font-weight:700;margin-left:4px}
+  .rtier{font-weight:700;font-size:14px;color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:14px;padding:7px 12px}
+  .rbar{height:12px;background:#fff;border:2px solid var(--line);border-radius:8px;overflow:hidden}
+  .rbar i{display:block;height:100%;background:linear-gradient(90deg,var(--pink),var(--butter));border-radius:8px;transition:width .5s}
+  .rnext{font-size:12.5px;color:var(--muted);font-weight:700;margin-top:8px}
+  .rhow{font-size:11.5px;color:var(--muted);font-weight:600;margin-top:6px}
+  .rank{display:flex;align-items:center;gap:11px;padding:8px 0;border-top:2px solid var(--line)} .rank:first-of-type{border-top:none}
+  .rank .m{font-size:19px;width:26px;text-align:center} .rank .n{flex:1;font-weight:700;font-size:14px} .rank .p{font-weight:700;color:var(--pink);font-size:14px}
+  .rhead{font-size:14px;color:var(--pink);margin-bottom:6px}
+
+  .overview{margin:0 18px 16px;background:var(--card);border:2.5px solid var(--line);border-radius:22px;padding:14px 16px}
+  .overview .ohead{font-size:14px;color:var(--pink);margin-bottom:10px}
+  .orow{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:2px solid var(--line)} .orow:first-of-type{border-top:none}
+  .orow .od{width:44px;height:44px;border-radius:13px;background:var(--butter-s);color:var(--butter-d);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
+  .orow .od b{font-size:17px;font-family:'Fredoka'} .orow .od span{font-size:10px}
+  .orow .ot{flex:1;font-weight:700;font-size:14px} .orow .ot small{display:block;color:var(--muted);font-weight:600;font-size:12px}
+  .orow .oarr{color:var(--muted);font-size:20px}
+  .omore{text-align:center;color:var(--muted);font-size:12px;padding-top:8px;font-weight:600}
+  .oempty{color:var(--muted);font-size:13px;text-align:center;padding:6px 0}
+
+  .monthbar{display:flex;align-items:center;justify-content:space-between;padding:0 22px 12px}
+  .monthbar .m{font-size:23px;color:var(--ink)}
+  .nav button{width:38px;height:38px;border-radius:14px;border:2.5px solid var(--line);background:var(--card);font-size:20px;color:var(--pink);display:inline-flex;align-items:center;justify-content:center;margin-left:8px}
+
+  .cal{padding:0 16px}
+  .dow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:6px} .dow span{text-align:center;font-size:11px;color:var(--muted);font-weight:700;padding:4px 0}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .cell{aspect-ratio:1/1.08;border-radius:16px;border:2.5px solid transparent;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;gap:2px;font-size:16px;font-weight:700;color:var(--ink);transition:transform .08s}
+  .cell.empty{background:transparent;pointer-events:none}
+  .cell.today{border-color:var(--pink)}
+  .cell:not(.empty):not(.blocked):active{transform:scale(.93)}
+  .cell.needed{background:var(--butter-s);border-color:#F6D493} .cell.needed .num{color:var(--butter-d)}
+  .cell.assigned{background:var(--mint-s);border-color:#A9E8D4} .cell.assigned .num{color:var(--mint-d)}
+  .cell.blocked{background:var(--grey-s);border-color:transparent;color:#C9B6C3;pointer-events:none} .cell.blocked .num{color:#C9B6C3}
+  .cell.sel{border-color:var(--lav);background:var(--lav-s);border-style:dashed;transform:scale(.96)}
+  .cell .who{font-size:9.5px;font-weight:700;line-height:1;color:var(--mint-d);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .dot{position:absolute;top:6px;right:6px;min-width:16px;height:16px;padding:0 3px;border-radius:9px;background:var(--pink);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .heart{position:absolute;top:5px;right:6px;font-size:11px;color:var(--pink)}
+  .cell.assigned .tick{position:absolute;top:5px;right:6px;font-size:12px}
+  .cell.blocked .lock{position:absolute;bottom:6px;font-size:10px}
+
+  .legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:20px 20px 2px}
+  .legend div{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:600}
+  .legend .sw{width:14px;height:14px;border-radius:6px}
+  .sw.a{background:var(--butter-s);border:2px solid #F6D493} .sw.g{background:var(--mint-s);border:2px solid #A9E8D4} .sw.o{background:var(--pink)} .sw.b{background:var(--grey-s)} .sw.p{background:var(--pink-s);border:2px solid #F6B9CE}
+  .hint{text-align:center;color:var(--muted);font-size:13px;padding:14px 34px 0;line-height:1.55}
+
+  #selbar{position:fixed;left:0;right:0;bottom:0;max-width:440px;margin:0 auto;z-index:19;display:flex;align-items:center;gap:12px;padding:14px 18px calc(18px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--bg) 72%,rgba(255,243,247,0));transform:translateY(150%);transition:transform .26s cubic-bezier(.32,.72,0,1)}
+  #selbar.show{transform:translateY(0)}
+  .selclear{width:46px;height:46px;border-radius:15px;border:2.5px solid var(--line);background:#fff;font-size:16px;color:var(--muted);flex-shrink:0}
+  .selcount{flex:1;font-weight:700;color:var(--ink);font-size:13.5px;line-height:1.35}
+  .selgo{padding:15px 26px;font-size:16px;flex-shrink:0}
+
+  #scrim{position:fixed;inset:0;background:rgba(90,46,74,.35);opacity:0;pointer-events:none;transition:opacity .22s;z-index:20}
+  #scrim.show{opacity:1;pointer-events:auto}
+  #sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;max-width:440px;margin:0 auto;background:var(--bg);border-radius:30px 30px 0 0;box-shadow:var(--shadow);transform:translateY(102%);transition:transform .3s cubic-bezier(.32,.72,0,1);padding:10px 22px calc(26px + env(safe-area-inset-bottom));max-height:90dvh;overflow-y:auto}
+  #sheet.show{transform:translateY(0)}
+  .grab{width:42px;height:5px;background:var(--line);border-radius:3px;margin:2px auto 16px}
+  .hbubble{display:flex;gap:10px;align-items:flex-start;margin-bottom:18px}
+  .hb-face{width:40px;height:40px;border-radius:13px;background:linear-gradient(150deg,#fff,var(--pink-s));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+  .hbubble p{background:#fff;border:2.5px solid var(--line);border-radius:6px 18px 18px 18px;padding:11px 14px;font-size:14.5px;font-weight:700;line-height:1.45;flex:1;color:var(--ink)}
+  .hbubble.sad p{background:var(--butter-s);border-color:#F6D493}
+  .sheet-date{font-size:24px;color:var(--ink)} .sheet-sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+  .sec{margin-bottom:18px}
+  .sec-label{font-size:14px;color:var(--pink);margin-bottom:10px} .sec-label .opt{color:var(--muted);font-weight:600;font-size:12px;font-family:'Quicksand'}
+  .hintline{color:var(--muted);font-size:12.5px;margin:-4px 0 10px;line-height:1.5}
+  .toggle-need{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:20px;border:2.5px solid var(--line);background:var(--card);font-size:15px;font-weight:700;color:var(--ink)}
+  .toggle-need.on{background:var(--butter-s);border-color:#F6D493;color:var(--butter-d)}
+  .toggle-need .pill{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;background:var(--line);color:var(--muted)} .toggle-need.on .pill{background:var(--butter);color:#fff}
+  .whenrow{display:flex;gap:8px;margin:12px 0 0}
+  .whenchip{flex:1;padding:12px;border-radius:15px;border:2.5px solid var(--line);background:var(--card);font-weight:700;font-size:14px;color:var(--muted)}
+  .whenchip.on{border-color:var(--pink);background:var(--pink-s);color:var(--pink-d)}
+  .times{display:flex;gap:10px;margin-top:10px} .times .field{flex:1;margin:0} .times input{padding:13px 12px;font-size:15px;border-radius:16px}
+  .noteinput{width:100%;padding:14px 16px;border-radius:16px;border:2.5px solid var(--line);background:var(--card);font-size:15px;margin-top:10px;color:var(--ink)}
+  .noteinput:focus{outline:none;border-color:var(--pink)}
+  .offer{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;background:var(--card);border:2.5px solid var(--line);margin-bottom:9px;flex-wrap:wrap}
+  .offer .ini{width:36px;height:36px;border-radius:12px;background:var(--pink-s);color:var(--pink-d);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+  .offer .nm{flex:1;font-weight:700;font-size:15px;min-width:80px} .offer .nm small{display:block;font-weight:600;color:var(--muted);font-size:12px}
+  .offer .zbtn{padding:10px 16px;border-radius:14px;font-size:13.5px}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;width:100%;margin-top:4px}
+  .tag{font-size:11px;font-weight:700;padding:4px 9px;border-radius:20px;background:var(--sky);color:#fff} .tag.act{background:var(--lav)}
+  .omsg{width:100%;font-size:12.5px;color:var(--muted);margin-top:6px;font-weight:600;font-style:italic}
+  .empty-note{color:var(--muted);font-size:14px;padding:6px 2px;line-height:1.55}
+  .banner{border-radius:20px;padding:16px;display:flex;align-items:center;gap:13px;margin-bottom:14px;flex-wrap:wrap}
+  .banner.ok{background:var(--mint-s);border:2.5px solid #A9E8D4} .banner.need{background:var(--butter-s);border:2.5px solid #F6D493}
+  .banner .ini{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;flex-shrink:0}
+  .banner.ok .ini{background:var(--mint);color:#fff} .banner.need .ini{background:var(--butter);color:#fff}
+  .banner .t{flex:1;min-width:120px} .banner .t strong{display:block;font-size:16px}
+  .banner.ok .t small{color:var(--mint-d);font-size:13px} .banner.need .t small{color:var(--butter-d);font-size:13px}
+  .link-btn{color:var(--pink-d);font-size:13.5px;font-weight:700;padding:6px}
+  .checks{display:flex;gap:10px;margin:2px 0 14px} .checks.wrap{flex-wrap:wrap}
+  .chip2{flex:1;padding:14px 12px;border-radius:18px;border:2.5px dashed var(--line);background:var(--card);font-size:14px;font-weight:700;color:var(--muted)}
+  .checks.wrap .chip2{flex:0 1 auto}
+  .chip2.on{border-style:solid;border-color:var(--sky);background:var(--sky-s);color:#2b8fd6}
+  .actchip.on{border-color:var(--lav);background:var(--lav-s);color:#7a53c2}
+  .cta-big{width:100%;padding:18px;font-size:16px;margin-top:4px}
+  .cta-ghost{width:100%;background:var(--card);border:2.5px solid var(--line);color:var(--ink);padding:15px;border-radius:20px;font-size:15px;font-weight:700;margin-top:10px}
+  .cta-done{width:100%;background:var(--mint-s);border:2.5px solid #A9E8D4;color:var(--mint-d);padding:16px;border-radius:20px;font-size:15px;font-weight:700;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px}
+  .cta-blocked{width:100%;background:var(--grey-s);color:var(--muted);padding:16px;border-radius:20px;font-size:15px;font-weight:700;text-align:center}
+  .pf{display:flex;gap:12px;padding:12px 0;border-top:2px solid var(--line)} .pf:first-child{border-top:none}
+  .pf .ic{font-size:22px;width:30px;text-align:center;flex-shrink:0}
+  .pf .pt{flex:1} .pf .pt b{display:block;font-size:12px;color:var(--muted);font-weight:700;margin-bottom:2px} .pf .pt span{font-size:14px;color:var(--ink);line-height:1.45}
+  .pfedit{margin-bottom:12px} .pfedit label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px 4px}
+  .stbrief-box{background:#fff;border:2.5px solid var(--line);border-radius:20px;padding:6px 16px;margin-top:6px}
+  .sharehead{background:var(--lav-s);border:2.5px solid #DCC9F5;border-radius:18px;padding:14px 16px;color:#7a53c2;font-size:13.5px;font-weight:700;line-height:1.5;margin-bottom:16px}
+  .prow{display:flex;align-items:center;gap:11px;padding:11px 0;border-top:2px solid var(--line)} .prow:first-of-type{border-top:none}
+  .prow .ini{width:38px;height:38px;border-radius:12px;background:var(--pink-s);color:var(--pink-d);font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .prow .pl{flex:1;min-width:0} .prow .pl b{font-size:14px} .prow .pl small{display:block;color:var(--muted);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+  .copybtn{padding:9px 14px;border-radius:13px;background:var(--pink);color:#fff;font-weight:700;font-size:12.5px;flex-shrink:0}
+  .invite{width:100%;margin-top:14px;padding:14px;border-radius:18px;border:2.5px dashed var(--line);background:#fff;font-weight:700;color:var(--pink-d)}
+
+  .actgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+  .acttile{aspect-ratio:1/1;border-radius:18px;border:2.5px dashed var(--line);background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:12px;font-weight:700;color:var(--muted);padding:4px;text-align:center;line-height:1.1}
+  .acttile .ai{font-size:26px}
+  .acttile.on{border-style:solid;border-color:var(--lav);background:var(--lav-s);color:#7a53c2}
+  .acttile.custom.on{border-color:var(--pink);background:var(--pink-s);color:var(--pink-d)}
+  .cell.offered{background:var(--pink-s);border-color:#F6B9CE} .cell.offered .num{color:var(--pink-d)}
+  .cell.offered .heart{color:var(--pink-d)}
+  .sheet-foot{position:sticky;bottom:0;background:linear-gradient(to top,var(--bg) 74%,rgba(255,243,247,0));padding:14px 0 4px;margin-top:6px;z-index:2}
+  .confetti{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
+  .confetti span{position:absolute;top:-32px;animation:fall 1.9s cubic-bezier(.3,.6,.4,1) forwards}
+  @keyframes fall{to{transform:translateY(112vh) rotate(420deg);opacity:.15}}
+  @media (prefers-reduced-motion:reduce){#sheet,#scrim,.cell,.hero-dog,#selbar,.rbar i,.confetti span{transition:none;animation:none}}
+</style>
+
+<style>
+  #login{flex:1;display:flex;flex-direction:column;justify-content:center;padding:30px 26px 44px}
+  #loginmsg{text-align:center;color:var(--pink-d);font-size:13px;font-weight:700;min-height:18px;margin-top:8px}
+  .switch{text-align:center;margin-top:16px;color:var(--muted);font-size:13px;font-weight:700}
+  .switch a{color:var(--pink-d);cursor:pointer}
+  #invalid{flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 30px;display:none}
+  #boot{flex:1;display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="boot">Hundi wird geweckt… 🐾</div>
+
+  <section id="login" style="display:none">
+    <div class="hero-dog">🐩</div>
+    <div class="brand"><h1 class="fred">Hundi</h1><p id="logintag">Hallo! Ich bin Hundi ๑˃ᴗ˂๑<br>schön, dass du da bist!</p></div>
+    <div id="f-signin">
+      <div class="field"><label>Deine E-Mail</label><input id="li-email" type="email" placeholder="du@beispiel.de"></div>
+      <div class="field"><label>Dein Geheimwort</label><input id="li-secret" type="password" placeholder="••••••••"></div>
+      <button class="cbtn pink big" onclick="doLogin()">Rein zu Hundi 🐾</button>
+      <div class="switch">Zum ersten Mal hier? <a onclick="showSetup()">Konto anlegen</a></div>
+    </div>
+    <div id="f-setup" style="display:none">
+      <div class="field"><label>Wie heißt dein Hund?</label><input id="su-dog" type="text" value="Hundi"></div>
+      <div class="field"><label>Deine E-Mail</label><input id="su-email" type="email" placeholder="du@beispiel.de"></div>
+      <div class="field"><label>Geheimwort ausdenken</label><input id="su-secret" type="password" placeholder="etwas, das nur du kennst"></div>
+      <button class="cbtn mint big" onclick="doSetup()">Los geht's ♡</button>
+      <div class="switch">Schon dabei? <a onclick="showSignin()">Anmelden</a></div>
+    </div>
+    <div id="loginmsg"></div>
+  </section>
+
+  <section id="invalid">
+    <div class="hero-dog" style="animation:none">🥺</div>
+    <h1 class="fred" style="color:var(--pink);font-size:30px;margin:18px 0 8px">Ups…</h1>
+    <p style="color:var(--muted);font-weight:700;line-height:1.6">Diesen Link kenn ich nicht ｜•́ﾉ•̀｜<br>Frag dein Herrchen nach einem neuen ♡</p>
+  </section>
+
+  <section id="app" style="display:none">
+    <div class="topbar"><div class="avatar">🐩</div><div class="hi"><small id="greet-sub"></small><div class="fred" id="greet-main"></div></div><button class="logout" id="logoutbtn" onclick="logout()">Abmelden</button></div>
+    <div id="hundisays"></div>
+    <div class="ownerActions" id="ownerActions" style="display:none"><button onclick="openSteckbrief()">🐩 Steckbrief</button><button onclick="openShare()">🔗 Link teilen</button></div>
+    <div id="topcard"></div>
+    <div class="overview" id="overview"></div>
+    <div class="monthbar"><div class="m fred" id="monthLabel"></div><span class="nav"><button onclick="shiftMonth(-1)">‹</button><button onclick="shiftMonth(1)">›</button></span></div>
+    <div class="cal"><div class="dow"><span>Mo</span><span>Di</span><span>Mi</span><span>Do</span><span>Fr</span><span>Sa</span><span>So</span></div><div class="grid" id="grid"></div></div>
+    <div class="legend" id="legend"></div>
+    <p class="hint" id="hint"></p>
+  </section>
+
+  <div id="selbar"><button class="selclear" onclick="clearSel()">✕</button><div class="selcount" id="selcount"></div><button class="cbtn pink selgo" onclick="proceed()">Weiter</button></div>
+  <div id="scrim" onclick="closeSheet()"></div>
+  <div id="sheet"><div class="grab"></div><div id="sheetBody"></div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SB_URL="https://usmyrikkalmiomffacqu.supabase.co";
+const ANON_KEY="sb_publishable_RvYzcozUl4juyHSDb2erIQ_q2xAIzPA";
+const sb=supabase.createClient(SB_URL,ANON_KEY);
+
+const MONTHS=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const WD=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+const WDS=['So','Mo','Di','Mi','Do','Fr','Sa'];
+const PF=[{k:'futter',ic:'🍖',l:'Futter'},{k:'gassi',ic:'🌳',l:'Gassi'},{k:'tierarzt',ic:'🏥',l:'Tierarzt / Notfall'},{k:'macken',ic:'💭',l:'Macken & Lieblingssachen'},{k:'schluessel',ic:'🔑',l:'Schlüssel'}];
+const ACTS=[{k:'gassi',ic:'🦴',l:'Gassi'},{k:'park',ic:'🌳',l:'Park'},{k:'spielen',ic:'🎾',l:'Spielen'},{k:'kuscheln',ic:'🛋️',l:'Kuscheln'},{k:'ausflug',ic:'🚗',l:'Ausflug'},{k:'fotos',ic:'📸',l:'Fotos'},{k:'nickerchen',ic:'😴',l:'Nickerchen'},{k:'leckerli',ic:'🍪',l:'Leckerli'}];
+const ACTMAP=Object.fromEntries(ACTS.map(a=>[a.k,a]));
+const joy=['⁀જ✧','✧◝(⁰▿⁰)◜✧','ヽ(♡‿♡)ノ','(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧','ദ്ദി ˃ ᵕ ˂','ﾟ+｡:.ﾟヽ(*´∀`)ﾉﾟ.:｡+ﾟ'];
+const sad=['｡ﾟ(ﾟ´ω`ﾟ)ﾟ｡','(っ- ‸ - ς)','｡•́︿•̀｡','( ˃̣̣̥⌓˂̣̣̥ )'];
+const beg=['(っ˘̩╭╮˘̩)っ','｡•́︿•̀｡','( ´•̥̥̥ω•̥̥̥` )','༎ຶ‿༎ຶ'];
+const rand=a=>a[Math.floor(Math.random()*a.length)];
+
+const state={role:null,ownerToken:null,sitterToken:null,me:'',points:0,dogName:'Hundi',profile:{},sitters:[],daysMap:{},view:null,today:'',sel:[]};
+
+function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function parse(k){const[y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d)}
+function key(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
+function ini(n){return (n||'?').slice(0,1).toUpperCase()}
+function fmtDate(k){const dt=parse(k);return{wd:WD[dt.getDay()],main:`${dt.getDate()}. ${MONTHS[dt.getMonth()]}`}}
+function shortD(k){const dt=parse(k);return `${WDS[dt.getDay()]} ${dt.getDate()}.`}
+function timeLabel(o){return o.t_from||o.t_to?`${o.t_from||'?'}–${o.t_to||'?'} Uhr`:'ganzer Tag'}
+function tierOf(p){if(p>=200)return{n:'Rudelboss',e:'👑',min:200,max:null,ne:null,nn:null};if(p>=100)return{n:'Hundi-Held:in',e:'✨',min:100,max:200,ne:'👑',nn:'Rudelboss'};if(p>=50)return{n:'Lieblingsmensch',e:'🦴',min:50,max:100,ne:'✨',nn:'Hundi-Held:in'};return{n:'Welpenfreund',e:'🐾',min:0,max:50,ne:'🦴',nn:'Lieblingsmensch'}}
+function tagsHtml(o){let t='';(o.acts||[]).forEach(k=>{const a=ACTMAP[k];if(a)t+=`<span class="tag act">${a.ic} ${a.l}</span>`});if(o.pickup)t+='<span class="tag">🚗 holt ab</span>';if(o.dropoff)t+='<span class="tag">🏡 bringt heim</span>';let h=t?`<div class="tags">${t}</div>`:'';if(o.msg)h+=`<div class="omsg">„${o.msg}"</div>`;return h}
+function esc(s){return (s||'').replace(/"/g,'&quot;')}
+function confetti(){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;const em=['🐾','♡','✨','🦴','⭐','🐩'];const c=document.createElement('div');c.className='confetti';for(let i=0;i<30;i++){const sp=document.createElement('span');sp.textContent=em[i%em.length];sp.style.left=Math.random()*100+'%';sp.style.animationDelay=(Math.random()*0.35)+'s';sp.style.fontSize=(16+Math.random()*18)+'px';c.appendChild(sp);}document.body.appendChild(c);setTimeout(()=>c.remove(),2400);}
+function toggleCustom(el){el.classList.toggle('on');const inp=document.getElementById('o-msg');if(!inp)return;const on=el.classList.contains('on');inp.style.display=on?'block':'none';if(on)inp.focus();else inp.value='';}
+
+async function rpc(fn,args){const{data,error}=await sb.rpc(fn,args);if(error){console.error(fn,error);throw error;}return data;}
+
+/* ---------- BOOT / AUTH ---------- */
+function show(id){['boot','login','invalid','app'].forEach(x=>document.getElementById(x).style.display=(x===id?(x==='app'||x==='login'||x==='invalid'?'flex':'block'):'none'));}
+function boot(){
+  const now=new Date();state.view=new Date(now.getFullYear(),now.getMonth(),1);state.today=ymd(now);
+  const s=new URL(location).searchParams.get('s');
+  if(s){state.role='sitter';state.sitterToken=s;loadSitter();return;}
+  const ot=localStorage.getItem('hundi_ot');
+  if(ot){state.role='owner';state.ownerToken=ot;loadOwner();return;}
+  show('login');
+}
+function showSetup(){document.getElementById('f-signin').style.display='none';document.getElementById('f-setup').style.display='block';document.getElementById('loginmsg').textContent='';}
+function showSignin(){document.getElementById('f-setup').style.display='none';document.getElementById('f-signin').style.display='block';document.getElementById('loginmsg').textContent='';}
+function lmsg(t){document.getElementById('loginmsg').textContent=t;}
+async function doLogin(){
+  const email=document.getElementById('li-email').value.trim(),sec=document.getElementById('li-secret').value;
+  if(!email||!sec){lmsg('Bitte E-Mail und Geheimwort eingeben ♡');return;}
+  lmsg('Moment… 🐾');
+  try{const r=await rpc('hundi_owner_login',{p_email:email,p_secret:sec});
+    if(r.error){lmsg(r.error==='nouser'?'Die E-Mail kenn ich nicht – schon ein Konto? ｡•́︿•̀｡':'Falsches Geheimwort ｡•́︿•̀｡');return;}
+    localStorage.setItem('hundi_ot',r.owner_token);state.role='owner';state.ownerToken=r.owner_token;loadOwner();
+  }catch(e){lmsg('Ups, das hat nicht geklappt – nochmal? ');}
+}
+async function doSetup(){
+  const dog=document.getElementById('su-dog').value.trim()||'Hundi',email=document.getElementById('su-email').value.trim(),sec=document.getElementById('su-secret').value;
+  if(!email||!sec){lmsg('Bitte E-Mail und Geheimwort ausdenken ♡');return;}
+  lmsg('Lege dein Konto an… 🐾');
+  try{const r=await rpc('hundi_setup',{p_email:email,p_secret:sec,p_dog_name:dog});
+    if(r.error==='exists'){lmsg('Diese E-Mail hat schon ein Konto – lieber anmelden ♡');return;}
+    localStorage.setItem('hundi_ot',r.owner_token);state.role='owner';state.ownerToken=r.owner_token;loadOwner();
+  }catch(e){lmsg('Ups, das hat nicht geklappt – nochmal?');}
+}
+function logout(){if(state.role==='owner'){localStorage.removeItem('hundi_ot');location.href=location.pathname;}else{location.href=location.pathname;}}
+
+async function loadOwner(){
+  try{const d=await rpc('hundi_owner_state',{p_owner_token:state.ownerToken});
+    if(d.error){localStorage.removeItem('hundi_ot');show('login');return;}
+    state.dogName=d.name;state.profile=d.profile||{};state.sitters=d.sitters||[];
+    state.daysMap=Object.fromEntries((d.days||[]).map(x=>[x.day,x]));
+    document.getElementById('ownerActions').style.display='flex';
+    document.getElementById('greet-sub').textContent='Hallo Herrchen! 🐾';
+    document.getElementById('greet-main').textContent=`${state.dogName}s Kalender`;
+    document.getElementById('legend').innerHTML='<div><span class="sw a"></span> sucht Aufpasser 🥺</div><div><span class="sw g"></span> vergeben ♡</div><div><span class="sw o"></span> Anfragen 🐾</div>';
+    document.getElementById('hint').textContent='Tipp die Tage an – dann auf „Weiter" ✨';
+    show('app');renderAll();
+  }catch(e){show('login');lmsg('Verbindung fehlgeschlagen.');}
+}
+async function loadSitter(){
+  try{const d=await rpc('hundi_sitter_state',{p_token:state.sitterToken});
+    if(d.error){show('invalid');return;}
+    state.me=d.sitter.name;state.points=d.sitter.points;state.dogName=d.dog.name;state.profile=d.profile;
+    state.daysMap=Object.fromEntries((d.days||[]).map(x=>[x.day,x]));
+    document.getElementById('ownerActions').style.display='none';
+    document.getElementById('logoutbtn').style.display='none';
+    document.getElementById('greet-sub').textContent=`Hallo ${state.me}! 🐾`;
+    document.getElementById('greet-main').textContent=`Wann magst du ${state.dogName}?`;
+    document.getElementById('legend').innerHTML='<div><span class="sw a"></span> brauche dich 🥺</div><div><span class="sw p"></span> angeboten ♡</div><div><span class="sw g"></span> bestätigt ✓</div><div><span class="sw b"></span> versorgt</div>';
+    document.getElementById('hint').textContent='Tipp die Tage an – dann auf „Weiter" ✨';
+    show('app');renderAll();
+  }catch(e){show('invalid');}
+}
+
+/* ---------- RENDER ---------- */
+function renderAll(){renderHundi();renderTopcard();renderOverview();render();renderBar();}
+let _flash=null,_ft=null;
+function flashHundi(text,mood){_flash={text,mood};renderHundi();clearTimeout(_ft);_ft=setTimeout(()=>{_flash=null;renderHundi();},3000);}
+function renderHundi(){
+  const box=document.getElementById('hundisays');let text,mood='';
+  if(_flash){text=_flash.text;mood=_flash.mood||'';}
+  else if(state.role==='owner'){
+    const open=Object.values(state.daysMap).filter(d=>d.needed&&!d.assigned).length;
+    text=open>0?`${open} ${open===1?'Tag sucht':'Tage suchen'} noch jemanden – schick den Link rum! 🐾`:`Alles versorgt – so ein Glückshund ${rand(joy)}`;
+  }else{
+    const openForMe=Object.values(state.daysMap).filter(d=>d.status==='needed').length;
+    if(openForMe>0){text=`An ${openForMe} ${openForMe===1?'Tag':'Tagen'} bin ich noch ganz allein… magst du? ${rand(sad)}`;mood='sad';}
+    else text=`Danke, dass es dich gibt, ${state.me} ${rand(joy)}`;
+  }
+  box.innerHTML=`<div class="hs-face">🐩</div><div class="hs-bubble ${mood}">${text}</div>`;
+}
+function renderTopcard(){
+  const box=document.getElementById('topcard');
+  if(state.role==='sitter'){
+    const p=state.points,t=tierOf(p);let bar,next;
+    if(t.max){bar=Math.min(100,Math.round((p-t.min)/(t.max-t.min)*100));next=`Noch ${t.max-p} Pfötchen bis ${t.ne} ${t.nn} ✨`;}else{bar=100;next=`Höchste Stufe – ${state.dogName} liebt dich am allermeisten ♡`;}
+    box.innerHTML=`<div class="reward"><div class="rtop"><div class="rpts"><b>${p}</b><span>Pfötchen ♡</span></div><div class="rtier">${t.e} ${t.n}</div></div><div class="rbar"><i style="width:${bar}%"></i></div><div class="rnext">${next}</div><div class="rhow">Pro Tag Aufpassen +10 Pfötchen · Abholen/Bringen extra ✨</div></div>`;
+  }else{
+    const rank=[...state.sitters].sort((a,b)=>b.points-a.points);const med=['🥇','🥈','🥉'];
+    if(!rank.length){box.innerHTML='';return;}
+    box.innerHTML=`<div class="reward"><div class="rhead pop">Meine Held:innen ♡</div>`+rank.map((r,i)=>`<div class="rank"><span class="m">${med[i]||'🐾'}</span><span class="n">${r.name}</span><span class="p">${r.points} ♡</span></div>`).join('')+`</div>`;
+  }
+}
+function renderOverview(){
+  const box=document.getElementById('overview'),owner=state.role==='owner';
+  const list=Object.keys(state.daysMap).filter(k=>{const i=state.daysMap[k];return owner?(i.needed&&!i.assigned):(i.status==='needed');}).sort();
+  let h=`<div class="ohead pop">${owner?'Braucht noch jemanden 🥺':'Hier bin ich noch allein 🥺'}</div>`;
+  if(!list.length)h+=`<div class="oempty">${owner?'Alles versorgt – guter Hund! ♡':'Grad ist alles gut ♡'}</div>`;
+  else{list.slice(0,3).forEach(k=>{const i=state.daysMap[k],dt=parse(k);const sub=owner?((i.offers&&i.offers.length)?`${i.offers.length} ${i.offers.length===1?'Anfrage':'Anfragen'} 🐾`:'noch niemand da 🥺'):'magst du mich? 👉👈';h+=`<div class="orow" onclick="openSingle('${k}')"><div class="od"><b>${dt.getDate()}.</b><span>${WDS[dt.getDay()]}</span></div><div class="ot">${MONTHS[dt.getMonth()]}<small>${sub}</small></div><div class="oarr">›</div></div>`;});if(list.length>3)h+=`<div class="omore">und ${list.length-3} weitere</div>`;}
+  box.innerHTML=h;
+}
+function render(){
+  const y=state.view.getFullYear(),m=state.view.getMonth();
+  document.getElementById('monthLabel').textContent=`${MONTHS[m]} ${y}`;
+  const lead=(new Date(y,m,1).getDay()+6)%7,dim=new Date(y,m+1,0).getDate();
+  const g=document.getElementById('grid');g.innerHTML='';
+  for(let i=0;i<lead;i++){const e=document.createElement('div');e.className='cell empty';g.appendChild(e);}
+  const owner=state.role==='owner';
+  for(let d=1;d<=dim;d++){
+    const k=key(y,m,d),info=state.daysMap[k],c=document.createElement('div');
+    c.className='cell';if(k===state.today)c.classList.add('today');
+    let inner=`<span class="num">${d}</span>`;
+    if(info){
+      if(owner){if(info.assigned){c.classList.add('assigned');inner+=`<span class="who">${info.assigned.name}</span><span class="tick">✓</span>`;}else if(info.needed){c.classList.add('needed');if(info.offers&&info.offers.length)inner+=`<span class="dot">${info.offers.length}</span>`;}else if(info.offers&&info.offers.length)inner+=`<span class="dot">${info.offers.length}</span>`;}
+      else{const st=info.status;if(st==='mine'){c.classList.add('assigned');inner+=`<span class="who">du ♡</span><span class="tick">✓</span>`;}else if(st==='taken'){c.classList.add('blocked');inner+=`<span class="lock">versorgt</span>`;}else if(st==='offered'){c.classList.add('offered');inner+=`<span class="heart">♡</span>`;}else if(st==='needed'){c.classList.add('needed');}}
+    }
+    if(state.sel.includes(k))c.classList.add('sel');
+    c.innerHTML=inner;c.onclick=()=>tapDay(k);g.appendChild(c);
+  }
+}
+function tapDay(k){const info=state.daysMap[k];if(state.role==='sitter'&&info&&info.status==='taken')return;const i=state.sel.indexOf(k);if(i>=0)state.sel.splice(i,1);else state.sel.push(k);render();renderBar();}
+function clearSel(re=true){state.sel=[];if(re){render();renderBar();}}
+function renderBar(){const n=state.sel.length,bar=document.getElementById('selbar');if(n>0){document.getElementById('selcount').innerHTML=barLine(n);bar.classList.add('show');}else bar.classList.remove('show');}
+function barLine(n){const k=joy[n%joy.length];if(state.role==='sitter'){if(n===1)return `Ein Tag mit dir?! ${k}`;if(n===2)return `Zwei Tage?! Boah ${state.me}! ${k}`;if(n===3)return `Drei Tage?!! Bestes ${state.me} ever ${k}`;return `${n} Tage mit dir – ich flipp aus ${k}`;}return n===1?`Ein Tag – ich bin bereit! ${k}`:`${n} Tage – auf geht\'s! ${k}`;}
+function proceed(){if(!state.sel.length)return;const ks=[...state.sel].sort();document.getElementById('selbar').classList.remove('show');openSheet(state.sel.length===1?singleSheet(ks[0]):bulkSheet(ks));}
+function openSingle(k){state.sel=[k];render();openSheet(singleSheet(k));}
+
+/* ---------- SHEET HELPERS ---------- */
+function hb(text,mood){return `<div class="hbubble ${mood||''}"><span class="hb-face">🐩</span><p>${text}</p></div>`}
+function openSheet(html){document.getElementById('sheetBody').innerHTML=html;document.getElementById('scrim').classList.add('show');document.getElementById('sheet').classList.add('show');}
+function closeSheet(){document.getElementById('scrim').classList.remove('show');document.getElementById('sheet').classList.remove('show');clearSel();}
+function setWhen(el,mode){[...el.parentNode.children].forEach(c=>c.classList.remove('on'));el.classList.add('on');document.getElementById('timefields').style.display=mode==='time'?'flex':'none';}
+function readWhen(){const on=document.querySelector('.whenchip.on');if(on&&on.dataset.mode==='time')return{from:document.getElementById('t-from').value,to:document.getElementById('t-to').value};return{from:'',to:''}}
+function whenBlock(o){const tm=o&&(o.t_from||o.t_to);return `<div class="whenrow"><button class="whenchip ${tm?'':'on'}" data-mode="day" onclick="setWhen(this,'day')">ganzer Tag</button><button class="whenchip ${tm?'on':''}" data-mode="time" onclick="setWhen(this,'time')">Uhrzeit</button></div><div class="times" id="timefields" style="display:${tm?'flex':'none'}"><div class="field"><label>ab</label><input type="time" id="t-from" value="${o?o.t_from||'':''}"></div><div class="field"><label>bis</label><input type="time" id="t-to" value="${o?o.t_to||'':''}"></div></div>`}
+function readChecks(){return{pickup:document.getElementById('chk-p')?.classList.contains('on')||false,dropoff:document.getElementById('chk-d')?.classList.contains('on')||false}}
+function readActs(){return[...document.querySelectorAll('.actchip.on')].map(e=>e.dataset.k)}
+function readMsg(){return document.getElementById('o-msg')?.value||''}
+function actsBlock(mine){const hasMsg=mine&&mine.msg;return `<div class="sec-label pop">Was unternehmen wir? <span class="opt">– optional</span></div><div class="hintline">Zeig mir, worauf du Bock hast ${rand(joy)}</div><div class="actgrid">`+ACTS.map(a=>`<button class="acttile actchip ${mine&&(mine.acts||[]).includes(a.k)?'on':''}" data-k="${a.k}" onclick="this.classList.toggle('on')"><span class="ai">${a.ic}</span>${a.l}</button>`).join('')+`<button class="acttile custom ${hasMsg?'on':''}" onclick="toggleCustom(this)"><span class="ai">✏️</span>Eigenes</button></div><input id="o-msg" class="noteinput" placeholder="Was macht ihr? Eigene Idee ♡" value="${hasMsg?esc(mine.msg):''}" style="margin-top:0;display:${hasMsg?'block':'none'}">`}
+function checksBlock(mine){return `<div class="sec-label pop">Übergabe <span class="opt">– optional</span></div><div class="hintline">Einfach leer lassen, wenn Herrchen das selbst macht ♡</div><div class="checks"><button class="chip2 ${mine&&mine.pickup?'on':''}" id="chk-p" onclick="this.classList.toggle('on')">🚗 Ich hole ab</button><button class="chip2 ${mine&&mine.dropoff?'on':''}" id="chk-d" onclick="this.classList.toggle('on')">🏡 Ich bringe heim</button></div>`}
+
+/* ---------- OWNER SHEETS ---------- */
+function getO(k){return state.daysMap[k]||{day:k,needed:false,t_from:'',t_to:'',note:'',assigned:null,offers:[]}}
+function singleSheet(k){return state.role==='owner'?ownerSingle(k):sitterSingle(k)}
+let _note='';
+function ownerSingle(k){
+  const info=getO(k),f=fmtDate(k);
+  const line=info.assigned?`${info.assigned.name} passt auf mich auf – yaaay! ${rand(joy)}`:((info.offers&&info.offers.length)?`Schau, wer auf mich aufpassen mag! ${rand(joy)}`:`Wer hat am ${f.main} Zeit für mich? ${rand(beg)}`);
+  _note=info.note||'';
+  let h=hb(line)+`<div class="sheet-date fred">${f.main}</div><div class="sheet-sub">${f.wd}</div>`;
+  h+=`<div class="sec"><button class="toggle-need ${info.needed?'on':''}" onclick="toggleNeed('${k}')">${state.dogName} braucht einen Aufpasser <span class="pill">${info.needed?'aktiv':'aus'}</span></button>`;
+  if(info.needed)h+=whenBlock(info)+`<input class="noteinput" placeholder="Notiz für den Aufpasser (wo mein Leckerli ist ♡)" value="${esc(info.note)}" oninput="_note=this.value"><button class="cbtn mint cta-big" style="margin-top:12px" onclick="saveOwnerDay('${k}')">Speichern ♡</button>`;
+  h+=`</div>`;
+  if(info.assigned)h+=`<div class="sec"><div class="sec-label pop">passt auf mich auf ♡</div><div class="banner ok"><div class="ini">${ini(info.assigned.name)}</div><div class="t"><strong>${info.assigned.name} passt auf mich auf! 🐾</strong><small>${timeLabel(info)} · bestätigt</small>${tagsHtml(info.assigned)}</div></div><button class="link-btn" onclick="ownerUnassign('${k}')">Zuweisung aufheben</button></div>`;
+  else{const offers=info.offers||[];h+=`<div class="sec"><div class="sec-label pop">Wer mag auf mich aufpassen? (${offers.length})</div>`;if(offers.length)offers.forEach(o=>{h+=`<div class="offer"><div class="ini">${ini(o.name)}</div><div class="nm">${o.name}<small>will mich nehmen 🐾</small></div><button class="cbtn mint zbtn" onclick="ownerAssign('${k}','${o.sitter_id}')">Der/die soll\'s sein!</button>${tagsHtml(o)}</div>`;});else h+=`<div class="empty-note">Noch niemand da… ${rand(sad)}<br>Trag mich als „gesucht" ein und schick den Link rum!</div>`;h+=`</div>`;}
+  return h;
+}
+async function toggleNeed(k){const info=getO(k);try{await rpc('hundi_owner_set_day',{p_owner_token:state.ownerToken,p_day:k,p_needed:!info.needed,p_from:info.t_from||'',p_to:info.t_to||'',p_note:info.note||''});await loadOwner();openSheet(ownerSingle(k));}catch(e){alert('Konnte nicht speichern');}}
+async function saveOwnerDay(k){const w=readWhen();try{await rpc('hundi_owner_set_day',{p_owner_token:state.ownerToken,p_day:k,p_needed:true,p_from:w.from,p_to:w.to,p_note:_note});closeSheet();await loadOwner();}catch(e){alert('Konnte nicht speichern');}}
+async function ownerAssign(k,sid){try{await rpc('hundi_owner_assign',{p_owner_token:state.ownerToken,p_day:k,p_sitter:sid});await loadOwner();openSheet(ownerSingle(k));confetti();const nm=(getO(k).assigned||{}).name||'';flashHundi(`${nm} kommt zu mir – ich freu mich sooo! ${rand(joy)}`);}catch(e){alert('Konnte nicht zuweisen');}}
+async function ownerUnassign(k){try{await rpc('hundi_owner_unassign',{p_owner_token:state.ownerToken,p_day:k});await loadOwner();openSheet(ownerSingle(k));}catch(e){alert('Fehler');}}
+
+function ownerBulk(ks){let h=hb(`${ks.length} Tage brauchen jemanden – finden wir wen! ${rand(joy)}`)+`<div class="sheet-date fred">${ks.length} Tage 🐾</div><div class="sheet-sub">${rangeTitle(ks)}</div>`;
+  h+=`<div class="sec-label pop">Wann brauche ich jemanden?</div>`+whenBlock(null)+`<input class="noteinput" id="b-note" placeholder="Notiz für alle Tage (wo mein Leckerli ist ♡)">`;
+  h+=`<div class="sheet-foot"><button class="cbtn pink cta-big" onclick='bulkOwner(${JSON.stringify(ks)})'>Für alle ${ks.length} Tage Aufpasser suchen 🥺</button></div><div class="empty-note" style="margin-top:8px">Zum Zuweisen tippst du später einen einzelnen Tag an ♡</div>`;return h;}
+async function bulkOwner(ks){const w=readWhen(),note=document.getElementById('b-note').value;try{for(const k of ks){await rpc('hundi_owner_set_day',{p_owner_token:state.ownerToken,p_day:k,p_needed:true,p_from:w.from,p_to:w.to,p_note:note});}closeSheet();await loadOwner();}catch(e){alert('Fehler beim Speichern');}}
+
+/* ---------- SITTER SHEETS ---------- */
+function getS(k){return state.daysMap[k]||{day:k,status:'free',t_from:'',t_to:'',note:null,assigned:null,my_offer:null}}
+function sitterSingle(k){
+  const info=getS(k),f=fmtDate(k),mine=info.my_offer,st=info.status;
+  if(st==='mine'){let h=hb(`Wir zwei am ${f.main}! Ich zähl schon die Tage ${rand(joy)}`)+`<div class="sheet-date fred">${f.main}</div><div class="sheet-sub">${f.wd}</div>`;
+    h+=`<div class="banner ok"><div class="ini">🐩</div><div class="t"><strong>Juhuu, du hast mich! ✧</strong><small>${timeLabel(info)} · bestätigt</small>${info.assigned?tagsHtml(info.assigned):''}</div></div>`;
+    if(info.note)h+=`<div class="empty-note" style="margin-bottom:8px">📝 Zettel von Herrchen: ${info.note}</div>`;
+    if(state.profile)h+=`<div class="sec-label pop" style="margin-top:14px">Mein Steckbrief 🐩</div><div class="stbrief-box">`+PF.map(p=>`<div class="pf"><div class="ic">${p.ic}</div><div class="pt"><b>${p.l}</b><span>${state.profile[p.k]||'—'}</span></div></div>`).join('')+`</div>`;
+    return h;}
+  if(st==='taken')return hb(`Der Tag ist schon versorgt – aber lieb, dass du schaust ♡`)+`<div class="sheet-date fred">${f.main}</div><div class="sheet-sub">${f.wd}</div><div class="cta-blocked">Schon versorgt ♡</div>`;
+  const needed=st==='needed';
+  const line=needed?`Willst du wirklich auf mich aufpassen, ${state.me}? Bitte bitte ${rand(beg)}`:`Du hast Zeit für mich? ${rand(joy)}`;
+  let h=hb(line,needed?'sad':'')+`<div class="sheet-date fred">${f.main}</div><div class="sheet-sub">${f.wd}</div>`;
+  if(needed)h+=`<div class="banner need"><div class="ini">🥺</div><div class="t"><strong>Ich brauche dich!</strong><small>${timeLabel(info)} · sonst bin ich ganz allein</small></div></div>`;
+  h+=actsBlock(mine)+checksBlock(mine);
+  if(mine)h+=`<div class="sheet-foot"><div class="cta-done">✓ Eingetragen! Herrchen bestätigt bald ♡</div><button class="cta-ghost" onclick="sitterWithdraw('${k}')">Oh nee, doch nicht</button></div>`;
+  else h+=`<div class="sheet-foot"><button class="cbtn pink cta-big" onclick="sitterOffer('${k}')">${needed?'Ja, ich pass auf dich auf! 🐾':'Ich hätte Zeit für dich ♡'}</button></div>`;
+  return h;
+}
+async function sitterOffer(k){const c=readChecks(),acts=readActs(),msg=readMsg();try{const r=await rpc('hundi_sitter_offer',{p_token:state.sitterToken,p_day:k,p_pickup:c.pickup,p_dropoff:c.dropoff,p_acts:acts,p_msg:msg});if(r&&r.error==='taken'){alert('Der Tag ist inzwischen vergeben ♡');}await loadSitter();confetti();const a=acts.map(x=>ACTMAP[x].l);const extra=a.length?` – ${a.slice(0,2).join(' & ')}, jaaa!`:'';flashHundi(`JUHUUU ${state.me}!!${extra} ${rand(joy)}`);}catch(e){alert('Konnte nicht eintragen');}}
+async function sitterWithdraw(k){try{await rpc('hundi_sitter_withdraw',{p_token:state.sitterToken,p_day:k});await loadSitter();flashHundi(`Ohh nein… dann bin ich wieder allein ${rand(sad)}`,'sad');}catch(e){alert('Fehler');}}
+function sitterBulk(ks){const open=ks.filter(k=>getS(k).status!=='taken');const allMine=open.every(k=>getS(k).my_offer);
+  let h=hb(`${ks.length} ganze Tage mit dir?! ${rand(joy)}`)+`<div class="sheet-date fred">${ks.length} Tage für ${state.dogName} ♡</div><div class="sheet-sub">${rangeTitle(ks)}</div>`;
+  if(allMine)return h+`<div class="sheet-foot"><div class="cta-done">✓ Du bist für alle eingetragen! ｡♥‿♥｡</div><button class="cta-ghost" onclick='bulkWithdraw(${JSON.stringify(ks)})'>Doch zurückziehen</button></div>`;
+  h+=actsBlock(null)+`<div style="height:14px"></div>`+checksBlock(null)+`<div class="sheet-foot"><button class="cbtn pink cta-big" onclick='bulkOffer(${JSON.stringify(ks)})'>Ich pass auf dich auf! (${ks.length} Tage) 🐾</button></div>`;return h;}
+async function bulkOffer(ks){const c=readChecks(),acts=readActs(),msg=readMsg();try{for(const k of ks){if(getS(k).status==='taken')continue;await rpc('hundi_sitter_offer',{p_token:state.sitterToken,p_day:k,p_pickup:c.pickup,p_dropoff:c.dropoff,p_acts:acts,p_msg:msg});}closeSheet();await loadSitter();confetti();flashHundi(`So viele Tage mit dir, ${state.me}?! Bestes Rudel ever ${rand(joy)}`);}catch(e){alert('Fehler');}}
+async function bulkWithdraw(ks){try{for(const k of ks){await rpc('hundi_sitter_withdraw',{p_token:state.sitterToken,p_day:k});}closeSheet();await loadSitter();flashHundi(`Ohh… schade ${rand(sad)}`,'sad');}catch(e){alert('Fehler');}}
+function rangeTitle(ks){return ks.length<=4?ks.map(shortD).join(' · '):`${shortD(ks[0])} – ${shortD(ks[ks.length-1])}`}
+
+/* ---------- STECKBRIEF / SHARE (owner) ---------- */
+function openSteckbrief(){let h=hb(`Das darf nur sehen, wer wirklich auf mich aufpasst 🐩`)+`<div class="sheet-date fred">Mein Steckbrief</div><div class="sheet-sub">Nur für bestätigte Aufpasser sichtbar</div>`;PF.forEach(p=>{h+=`<div class="pfedit"><label>${p.ic} ${p.l}</label><input class="noteinput" style="margin-top:0" id="pf-${p.k}" value="${esc(state.profile[p.k]||'')}"></div>`;});h+=`<button class="cbtn mint cta-big" onclick="saveSteckbrief()">Speichern ♡</button>`;openSheet(h);}
+async function saveSteckbrief(){const prof={};PF.forEach(p=>{prof[p.k]=document.getElementById('pf-'+p.k).value;});try{await rpc('hundi_owner_set_profile',{p_owner_token:state.ownerToken,p_profile:prof});state.profile=prof;closeSheet();}catch(e){alert('Fehler');}}
+function sitterLink(tok){return location.origin+location.pathname+'?s='+tok;}
+function openShare(){let h=hb(`Schick mich rum – ich will neue Freunde! ${rand(joy)}`)+`<div class="sheet-date fred">Link teilen 🔗</div><div class="sheet-sub">Jede:r bekommt einen eigenen</div><div class="sharehead">Eigener Link pro Person – so sehen sich die Aufpasser gegenseitig nicht ♡</div>`;
+  if(!state.sitters.length)h+=`<div class="empty-note">Noch niemand eingeladen. Leg unten deine erste Person an ♡</div>`;
+  state.sitters.forEach(p=>{h+=`<div class="prow"><div class="ini">${ini(p.name)}</div><div class="pl"><b>${p.name}</b><small>${sitterLink(p.token)}</small></div><button class="copybtn" onclick="copyLink(this,'${sitterLink(p.token)}')">Kopieren</button></div>`;});
+  h+=`<div style="margin-top:16px;display:flex;gap:10px"><input class="noteinput" id="newsitter" placeholder="Name der Person" style="margin-top:0;flex:1"><button class="cbtn mint" style="padding:0 18px;border-radius:16px" onclick="addSitter()">+ Einladen</button></div>`;
+  openSheet(h);}
+async function addSitter(){const name=document.getElementById('newsitter').value.trim();if(!name)return;try{await rpc('hundi_owner_add_sitter',{p_owner_token:state.ownerToken,p_name:name});await loadOwner();openShare();}catch(e){alert('Fehler');}}
+function copyLink(btn,url){try{navigator.clipboard.writeText(url);}catch(e){}btn.textContent='Kopiert ✓';setTimeout(()=>btn.textContent='Kopieren',1400);}
+function shiftMonth(d){state.view=new Date(state.view.getFullYear(),state.view.getMonth()+d,1);render();}
+
+boot();
+</script>
+</body>
+</html>
