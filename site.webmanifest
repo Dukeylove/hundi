@@ -2,10 +2,7 @@
   "name": "Hundi ♡ Wer passt auf?",
   "short_name": "Hundi",
   "description": "Magst du mal auf Hundi aufpassen? Trag dich ein – ganz einfach, ohne App.",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "orientation": "portrait",
+  "display": "browser",
   "background_color": "#4AA6F2",
   "theme_color": "#FF7FA8",
   "icons": [
