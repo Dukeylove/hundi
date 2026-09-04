@@ -239,6 +239,8 @@
   .reqrow .rq small{color:var(--muted);font-size:12px}
   .pend{color:var(--butter-d);font-weight:800}
   .reqbtn{padding:9px 14px;border-radius:13px;font-size:13px;flex-shrink:0}
+  .offdecline{padding:10px 14px;border-radius:14px;font-size:13px;font-weight:700;background:#fff;border:2.5px solid var(--line);color:var(--muted);flex-shrink:0}
+  .offdecline:active{border-color:var(--pink-d);color:var(--pink-d)}
   /* --- Anleitung-Link --- */
   .anleitung{display:block;margin:8px auto 24px;color:var(--muted);font-size:13px;font-weight:700;background:none;border:none;padding:8px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
   /* --- Onboarding --- */
@@ -559,13 +561,14 @@ function ownerSingle(k){
   if(info.needed)h+=whenBlock(info)+`<input class="noteinput" placeholder="Notiz für den Aufpasser (wo mein Leckerli ist ♡)" value="${esc(info.note)}" oninput="_note=this.value"><button class="cbtn mint cta-big" style="margin-top:12px" onclick="saveOwnerDay('${k}')">Speichern ♡</button>`;
   h+=`</div>`;
   if(info.assigned)h+=`<div class="sec"><div class="sec-label pop">passt auf mich auf ♡</div><div class="banner ok"><div class="ini">${ini(info.assigned.name)}</div><div class="t"><strong>${info.assigned.name} passt auf mich auf! 🐾</strong><small>${timeLabel(info)} · bestätigt</small>${tagsHtml(info.assigned)}</div></div><button class="link-btn" onclick="ownerUnassign('${k}')">Zuweisung aufheben</button></div>`;
-  else{const offers=info.offers||[];h+=`<div class="sec"><div class="sec-label pop">Wer mag auf mich aufpassen? (${offers.length})</div>`;if(offers.length)offers.forEach(o=>{h+=`<div class="offer"><div class="ini">${ini(o.name)}</div><div class="nm">${o.name}<small>will mich nehmen 🐾</small></div><button class="cbtn mint zbtn" onclick="ownerAssign('${k}','${o.sitter_id}')">Der/die soll\'s sein!</button>${tagsHtml(o)}</div>`;});else h+=`<div class="empty-note">Noch niemand da… ${rand(sad)}<br>Trag mich als „gesucht" ein und schick den Link rum!</div>`;h+=`</div>`;}
+  else{const offers=info.offers||[];h+=`<div class="sec"><div class="sec-label pop">Wer mag auf mich aufpassen? (${offers.length})</div>`;if(offers.length)offers.forEach(o=>{h+=`<div class="offer"><div class="ini">${ini(o.name)}</div><div class="nm">${o.name}<small>Anfrage – noch nicht bestätigt 🐾</small></div><button class="cbtn mint zbtn" onclick="ownerAssign('${k}','${o.sitter_id}')">Der/die soll\'s sein!</button><button class="offdecline" onclick="ownerDecline('${k}','${o.sitter_id}','${esc(o.name)}')">Absagen</button>${tagsHtml(o)}</div>`;});else h+=`<div class="empty-note">Noch niemand da… ${rand(sad)}<br>Trag mich als „gesucht" ein und schick den Link rum!</div>`;h+=`</div>`;}
   return h;
 }
 async function toggleNeed(k){const info=getO(k);try{await rpc('hundi_owner_set_day',{p_owner_token:state.ownerToken,p_day:k,p_needed:!info.needed,p_from:info.t_from||'',p_to:info.t_to||'',p_note:info.note||''});await loadOwner();openSheet(ownerSingle(k));}catch(e){alert('Konnte nicht speichern');}}
 async function saveOwnerDay(k){const w=readWhen();try{await rpc('hundi_owner_set_day',{p_owner_token:state.ownerToken,p_day:k,p_needed:true,p_from:w.from,p_to:w.to,p_note:_note});closeSheet();await loadOwner();}catch(e){alert('Konnte nicht speichern');}}
 async function ownerAssign(k,sid){try{await rpc('hundi_owner_assign',{p_owner_token:state.ownerToken,p_day:k,p_sitter:sid});await loadOwner();openSheet(ownerSingle(k));confetti();const nm=(getO(k).assigned||{}).name||'';flashHundi(`${nm} kommt zu mir – ich freu mich sooo! ${rand(joy)}`);}catch(e){alert('Konnte nicht zuweisen');}}
 async function ownerUnassign(k){try{await rpc('hundi_owner_unassign',{p_owner_token:state.ownerToken,p_day:k});await loadOwner();openSheet(ownerSingle(k));}catch(e){alert('Fehler');}}
+async function ownerDecline(k,sid,name){if(!confirm((name?`Anfrage von ${name}`:'Diese Anfrage')+' absagen und entfernen?'))return;try{await rpc('hundi_owner_decline_offer',{p_owner_token:state.ownerToken,p_day:k,p_sitter:sid});await loadOwner();openSheet(ownerSingle(k));flashHundi(`Anfrage abgesagt – alles gut ${rand(joy)}`);}catch(e){alert('Konnte nicht absagen');}}
 
 function ownerBulk(ks){let h=hb(`${ks.length} Tage brauchen jemanden – finden wir wen! ${rand(joy)}`)+`<div class="sheet-date fred">${ks.length} Tage 🐾</div><div class="sheet-sub">${rangeTitle(ks)}</div>`;
   h+=`<div class="sec-label pop">Wann brauche ich jemanden?</div>`+whenBlock(null)+`<input class="noteinput" id="b-note" placeholder="Notiz für alle Tage (wo mein Leckerli ist ♡)">`;
